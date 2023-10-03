@@ -1,6 +1,11 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+NULLABLE = {
+    'null': True,
+    'blank': True
+}
+
 
 # Create your models here.
 class User(AbstractUser):
@@ -8,9 +13,9 @@ class User(AbstractUser):
 
     email = models.EmailField(verbose_name='Почта', unique=True)
 
-    phone = models.CharField(max_length=100, verbose_name='Телефон')
-    town = models.CharField(max_length=100, verbose_name='Город')
-    avatar = models.ImageField(upload_to='users/', verbose_name='Аватар', blank=True, null=True)
+    phone = models.CharField(max_length=100, verbose_name='Телефон', **NULLABLE)
+    town = models.CharField(max_length=100, verbose_name='Город', **NULLABLE)
+    avatar = models.ImageField(upload_to='users/', verbose_name='Аватар', **NULLABLE)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
