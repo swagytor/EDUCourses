@@ -1,8 +1,8 @@
 from rest_framework.generics import UpdateAPIView, RetrieveAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 
-from education.permissions import IsOwnerOrIsSuperUser
 from users.models import User
+from users.permissions import IsOwnAccount
 from users.serializer import PrivateUserSerializer, PublicUserSerializer
 
 
@@ -26,4 +26,5 @@ class UserRetrieveAPIView(RetrieveAPIView):
 class UserUpdateAPIView(UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = PublicUserSerializer
-    permission_classes = [IsOwnerOrIsSuperUser]
+    permission_classes = [IsOwnAccount]
+
