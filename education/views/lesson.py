@@ -19,12 +19,10 @@ class LessonListAPIView(ListAPIView):
         """Получение объектов Lesson в зависимости от пользователя"""
         queryset = super().get_queryset()
 
-        if self.request.user:
-            return queryset.filter(owner=self.request.user)
-
-        elif self.request.user.is_staff:
+        if self.request.user.is_staff:
             return queryset.all()
-
+        elif self.request.user:
+            return queryset.filter(owner=self.request.user)
         else:
             return queryset.none()
 
