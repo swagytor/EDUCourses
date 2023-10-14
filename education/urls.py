@@ -6,6 +6,7 @@ from education.views.course import CourseViewSet
 from education.views.lesson import LessonCreateAPIView, LessonListAPIView, LessonRetrieveAPIView, LessonUpdateAPIView, \
     LessonDestroyAPIView
 from education.views.payment import PaymentListAPIView
+from education.views.subscribe import course_subscription
 
 app_name = EducationConfig.name
 
@@ -21,4 +22,6 @@ urlpatterns = [
 
 
     path('payment/list/', PaymentListAPIView.as_view(), name='payment-list'),
+
+    path('course_subscription/<int:pk>/', course_subscription, name='course-subscription'),
               ] + router.urls
