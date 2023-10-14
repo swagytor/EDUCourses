@@ -2,6 +2,7 @@ from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView,
 from rest_framework.permissions import IsAuthenticated
 
 from education.models import Lesson
+from education.pagination import EducationPageNumberPagination
 from education.permissions import IsOwnerOrIsSuperUser, IsStaff, IsCourseOwner
 from education.serializer import LessonSerializer
 
@@ -10,10 +11,16 @@ class LessonCreateAPIView(CreateAPIView):
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated & ~IsStaff]
 
+    def perform_create(self, serializer):
+        obj = serializer.save()
+        obj.owner = self.request.user
+        obj.save()
+
 
 class LessonListAPIView(ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    pagination_class = EducationPageNumberPagination
 
     def get_queryset(self):
         """Получение объектов Lesson в зависимости от пользователя"""
@@ -25,11 +32,6 @@ class LessonListAPIView(ListAPIView):
             return queryset.filter(owner=self.request.user)
         else:
             return queryset.none()
-
-    def perform_create(self, serializer):
-        obj = serializer.save()
-        obj.owner = self.request.user
-        obj.save()
 
 
 class LessonRetrieveAPIView(RetrieveAPIView):

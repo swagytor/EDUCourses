@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from education.models import Course
+from education.pagination import EducationPageNumberPagination
 from education.permissions import IsOwnerOrIsSuperUser, IsStaff
 from education.serializer import CourseSerializer
 
@@ -9,6 +10,7 @@ from education.serializer import CourseSerializer
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
+    pagination_class = EducationPageNumberPagination
 
     def get_queryset(self):
         """Получение объектов Course в зависимости от пользователя"""

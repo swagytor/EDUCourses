@@ -16,4 +16,5 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'purchase_date', 'price', 'payment_type',)
+    list_display = ('course', 'user', 'purchase_date', 'price', 'payment_type',)
+    ordering = ('course',)
