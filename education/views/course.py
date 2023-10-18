@@ -1,3 +1,4 @@
+import stripe
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
@@ -26,6 +27,10 @@ class CourseViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         obj = serializer.save()
         obj.owner = self.request.user
+        obj.product_id = stripe.Product.create(
+            name=obj.title,
+            description=obj.description
+        ).get('id')
         obj.save()
 
     def get_permissions(self):

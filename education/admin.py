@@ -11,10 +11,10 @@ class LessonAdmin(admin.ModelAdmin):
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'title',)
+    list_display = ('pk', 'title', 'price')
 
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('course', 'user', 'purchase_date', 'price', 'payment_type',)
+    list_display = ('course', 'user', 'purchase_date', 'payment_type',)
     ordering = ('course',)

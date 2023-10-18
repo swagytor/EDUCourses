@@ -1,3 +1,4 @@
+import stripe
 from rest_framework import serializers
 from education.models import Course, Lesson, Payment, Subscribe
 from education.validators import URLValidator
@@ -29,9 +30,18 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class PaymentSerializer(serializers.ModelSerializer):
+    payment_info = serializers.SerializerMethodField()
+
+    def get_payment_info(self, instance):
+        if instance.session_id:
+            intent = stripe.checkout.Session.retrieve(instance.session_id)
+
+            return intent
+        return None
+
     class Meta:
         model = Payment
-        fields = '__all__'
+        fields = ['user', 'purchase_date', 'course', 'payment_type', 'payment_info']
 
 
 class SubscribeSerializer(serializers.ModelSerializer):

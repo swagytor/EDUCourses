@@ -14,6 +14,9 @@ class Course(models.Model):
     preview = models.ImageField(upload_to='courses/', verbose_name='Превью', **NULLABLE)
     description = models.TextField(verbose_name='Описание')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец', **NULLABLE)
+    price = models.PositiveBigIntegerField(verbose_name='Цена')
+
+    product_id = models.CharField(max_length=200, verbose_name='Идентификатор продукта', **NULLABLE)
 
     def __str__(self):
         return f"{self.title}"
@@ -29,7 +32,6 @@ class Lesson(models.Model):
     description = models.TextField(verbose_name='Описание')
     video_url = models.URLField(verbose_name='Ссылка на видео')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Курс')
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец', **NULLABLE)
 
     def __str__(self):
         return f"{self.title}"
@@ -51,8 +53,10 @@ class Payment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     purchase_date = models.DateTimeField(verbose_name='Дата покупки', auto_now_add=True)
     course = models.ForeignKey(Course, on_delete=models.SET_NULL, verbose_name='Курс', null=True)
-    price = models.PositiveBigIntegerField(verbose_name='Цена')
-    payment_type = models.CharField(choices=PAYMENT_CHOICES, verbose_name='Способ оплаты')
+    payment_type = models.CharField(default=CARD_TYPE_PAYMENT, choices=PAYMENT_CHOICES, verbose_name='Способ оплаты')
+
+    session_id = models.CharField(max_length=100, verbose_name='Идентификатор сессии', **NULLABLE)
+    session_url = models.TextField(verbose_name='Ссылка для оплаты', **NULLABLE)
 
     def __str__(self):
         return f"{self.user.email} 'Курс:' {self.course.title}"
